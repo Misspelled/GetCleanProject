@@ -22,7 +22,7 @@ master <- dplyr::bind_rows(list(test, train))
 
 ## load variable names for identification of std and mean variables
 labels <- as.character(read.table(file="features.txt")[[2]])
-keepIndex <- grep("(std\\(\\))|(mean\\(\\))",labels)
+keepIndex <- grep("(std\\(\\))|([Mm]ean\\(\\))",labels)
 
 master <- master[,c(1:2, keepIndex + 2)]
 labels <- labels[keepIndex]
