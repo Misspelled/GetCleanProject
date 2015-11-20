@@ -74,7 +74,18 @@ img {
 <p>Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerkXYZ and tBodyGyroJerkXYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag).</p>
 <p>Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAccXYZ, fBodyAccJerkXYZ, fBodyGyroXYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the ‘f’ to indicate frequency domain signals).</p>
 <p>These signals were used to estimate variables of the feature vector for each pattern:<br />‘-XYZ’ is used to denote 3-axial signals in the X, Y and Z directions.</p>
-<p>tBodyAccXYZ tGravityAccXYZ tBodyAccJerkXYZ tBodyGyroXYZ tBodyGyroJerkXYZ tBodyAccMag tGravityAccMag tBodyAccJerkMag tBodyGyroMag tBodyGyroJerkMag fBodyAccXYZ fBodyAccJerkXYZ fBodyGyroXYZ fBodyAccMag fBodyAccJerkMag fBodyGyroMag fBodyGyroJerkMag</p>
+<pre><code>        Accelerometer     |     Gyroscope
+        __________________|_________________
+        tBodyAccXYZ       | tBodyGyroXYZ
+        tGravityAccXYZ    | tBodyGyroJerkXYZ
+        tBodyAccJerkXYZ   | tBodyGyroMag
+        tBodyAccMag       | tBodyGyroJerkMag
+        tGravityAccMag    | fBodyGyroXYZ
+        tBodyAccJerkMag   | fBodyGyroMag
+        fBodyAccXYZ       | fBodyGyroJerkMag
+        fBodyAccJerkXYZ   |
+        fBodyAccMag       |
+        fBodyAccJerkMag   |</code></pre>
 <p>While a number variables were estimated from these signals, only Mean and Standard deviation were kept in the master and transformed data sets</p>
 <p>Mean: Mean value Std: Standard deviation</p>
 <p>Additional vectors obtained by averaging the signals in a signal window sample. These are used on the angle variable:</p>
@@ -90,6 +101,27 @@ names(ytest) &lt;- &quot;response&quot;
 stest &lt;- read.table(file=&quot;test/subject_test.txt&quot;)
 names(stest) &lt;- &quot;subject&quot;
 test &lt;- dplyr::bind_cols(list(stest, ytest, xtest))</code></pre>
+<p>We do the same operation on the training set and then merge into one master data set</p>
+<pre><code>master &lt;- dplyr::bind_rows(list(test, train))</code></pre>
+<p>Now for some subsetting and variable name cleanup. The raw data is without meaning headers but we have descriptions in <code>features.txt</code>. We are interested only in variables describing Mean or Standard Deviation. Assuming the data is ordered in the same way as the labels, we can <code>grep</code> the relevant names from the descriptions and create a subsetting index to drop unwanted variables.</p>
+<pre><code>labels &lt;- as.character(read.table(file=&quot;features.txt&quot;)[[2]])
+keepIndex &lt;- grep(&quot;(std\\(\\))|([Mm]ean\\(\\))&quot;,labels)
+master &lt;- master[,c(1:2, keepIndex + 2)] ##remember we added two columns above
+labels &lt;- labels[keepIndex]</code></pre>
+<p>The variable names have punctuation and are hard to read, so we clean them up here.</p>
+<pre><code>labels &lt;- gsub(&quot;(\\(\\))|-&quot;,&quot;&quot;,labels)
+labels &lt;- gsub(&quot;mean&quot;,&quot;Mean&quot;,labels)
+labels &lt;- gsub(&quot;std&quot;,&quot;Std&quot;,labels)
+names(master)[3:ncol(master)] &lt;- labels ## we added two columns with good names already</code></pre>
+<p>Now we should get a meaninful name for the activity variable. Now it is represented by an integer. We load these names and create a table to join with <code>master</code>.</p>
+<pre><code>act &lt;- read.table(&quot;activity_labels.txt&quot;)
+names(act) &lt;- c(&quot;ind&quot;, &quot;activity&quot;)
+master &lt;- master %&gt;% inner_join(act, by=c(&quot;response&quot;=&quot;ind&quot;)) %&gt;% select(-response) </code></pre>
+<p>Our data has multiple observations per subject as measures. This is due to both repeated measurements over time and multiple measurements per activity. To get to one record per subject we have to both pivot and aggregate the data (mean). We first summarize our data with a grouped mean. We then use the <code>reshape2</code> package to first melt and then cast the data into the required shape.</p>
+<pre><code>library(reshape2)
+tdy &lt;- master %&gt;% group_by(subject, activity) %&gt;% summarise_each(funs(mean))
+tdy_cast &lt;- tdy %&gt;% melt(id.vars=c(&quot;subject&quot;,&quot;activity&quot;)) %&gt;% dcast(subject ~ variable + activity)
+write.table(tdy_cast, &quot;tidy.txt&quot;, row.names = FALSE) ## write local table for upload</code></pre>
 </div>
 
 
