@@ -4,19 +4,22 @@ author: "Geoff Clark"
 date: "November 20, 2015"
 output:
   html_document:
+    highlight: null
     keep_md: yes
+    self_contained: no
+    smart: no
+    theme: null
 ---
 ## Variables and Units of Measure
-Our data set comes from the accelerometer and gyroscope 3-axial raw signals tAccXYZ and tGyroXYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAccXYZ and tGravityAccXYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
+Our data set comes from the accelerometer and gyroscope 3-axial raw signals `tAccXYZ` and `tGyroXYZ`. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (`tBodyAccXYZ` and `tGravityAccXYZ`) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
 
-Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerkXYZ and tBodyGyroJerkXYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (`tBodyAccJerkXYZ` and `tBodyGyroJerkXYZ`). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (`tBodyAccMag`, `tGravityAccMag`, `tBodyAccJerkMag`, `tBodyGyroMag`, `tBodyGyroJerkMag`). 
 
-Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAccXYZ, fBodyAccJerkXYZ, fBodyGyroXYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing `fBodyAccXYZ`, `fBodyAccJerkXYZ`, `fBodyGyroXYZ`, `fBodyAccJerkMag`, `fBodyGyroMag`, `fBodyGyroJerkMag`. (Note the 'f' to indicate frequency domain signals). 
 
 These signals were used to estimate variables of the feature vector for each pattern:  
 '-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
 
-            Accelerometer     |     Gyroscope
             __________________|_________________
             tBodyAccXYZ       | tBodyGyroXYZ
             tGravityAccXYZ    | tBodyGyroJerkXYZ
@@ -25,24 +28,20 @@ These signals were used to estimate variables of the feature vector for each pat
             tGravityAccMag    | fBodyGyroXYZ
             tBodyAccJerkMag   | fBodyGyroMag
             fBodyAccXYZ       | fBodyGyroJerkMag
-            fBodyAccJerkXYZ   |
+            fBodyAccJerkXYZ   | fBodyAccJerkMag
             fBodyAccMag       |
-            fBodyAccJerkMag   |
-
-
 
 While a number variables were estimated from these signals, only Mean and Standard deviation were kept in the master and transformed data sets 
 
-Mean: Mean value
-Std: Standard deviation
+`Mean`: Mean value
+`Std`: Standard deviation
 
-Additional vectors obtained by averaging the signals in a signal window sample. These are used on the angle variable:
-
-gravityMean
-tBodyAccMean
-tBodyAccJerkMean
-tBodyGyroMean
-tBodyGyroJerkMean
+Additional vectors obtained by averaging the signals in a signal window sample. These are used on the angle variable:  
+`gravityMean`  
+`tBodyAccMean`  
+`tBodyAccJerkMean`  
+`tBodyGyroMean`  
+`tBodyGyroJerkMean`  
 
 The complete list of variables of each feature vector is available in 'features.txt'
 

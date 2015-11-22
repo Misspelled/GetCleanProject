@@ -5,6 +5,8 @@ date: "November 20, 2015"
 output:
   html_document:
     keep_md: yes
+    self_contained: no
+    smart: no
 ---
 ## Overview
 This repository contains the script and data to load and manipulate raw data collected from Samsung Galaxy S smartphone accelerometers.The data was collected on a group of 30 volunteers performing a   discrete number of activities while wearing smartphones. Measurements were 3-axial linear acceleration and 3-axial angular velocity. The data has been randomly partitioned into two sets, with 70% of the subjects generating training data and 30% generating test data.
