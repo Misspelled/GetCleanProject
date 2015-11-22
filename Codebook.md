@@ -1,16 +1,6 @@
----
-title: "Codebook"
-author: "Geoff Clark"
-date: "November 20, 2015"
-output:
-  html_document:
-    highlight: null
-    keep_md: yes
-    self_contained: no
-    smart: no
-    theme: null
----
-## Variables and Units of Measure
+#Codebook
+
+### Variables and Units of Measure
 Our data set comes from the accelerometer and gyroscope 3-axial raw signals `tAccXYZ` and `tGyroXYZ`. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (`tBodyAccXYZ` and `tGravityAccXYZ`) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
 
 Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (`tBodyAccJerkXYZ` and `tBodyGyroJerkXYZ`). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (`tBodyAccMag`, `tGravityAccMag`, `tBodyAccJerkMag`, `tBodyGyroMag`, `tBodyGyroJerkMag`). 
@@ -45,7 +35,7 @@ Additional vectors obtained by averaging the signals in a signal window sample. 
 
 The complete list of variables of each feature vector is available in 'features.txt'
 
-## Script Operation
+### Script Operation
 
 Test and train data exists in 3 files each for a total of 6 files. Files beginning with `X` are the continuous measurment data while the two other files are categorical data related to subject and activity. Below is the code to combine the three `test` files into one table. 
 
